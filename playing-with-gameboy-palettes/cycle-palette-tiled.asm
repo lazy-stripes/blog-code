@@ -3,7 +3,7 @@
 INCLUDE "include/header.asm"
 
 ; RGBDS supports defining internal variables, for readability.
-DEF WAIT_FRAMES EQU 60
+DEF WAIT_FRAMES EQU 10
 
 SECTION "default", ROM0
 main:
@@ -22,7 +22,7 @@ waitForFrame:
 
     ; Clear VRAM from 0x8000 to 0x9fff (borrowed from boot ROM code).
     LD HL, $9fff
-clearVRAM:
+    clearVRAM:
     LD [HL-], A         ; Set byte at address [HL] to zero, then decrement HL.
     BIT 7, H            ; Check whether H is still larger than 0x80.
     JR NZ, clearVRAM    ; If not, keep clearing VRAM.
@@ -75,11 +75,12 @@ vblank:
     ; If we got here, our counter is zero, so we Do The Thing.
 
     LDH A, [$FF00+$47]    ; Load current BGP value in A.
-    XOR A, $ff            ; Invert the value by XORing every bit with 1.
-    LDH [$FF00+$47], A    ; Store the inverted value back in BGP.
+    RLC A                 ; Rotate all bits left in BGP twice
+    RLC A                 ; since a BGP entry is 2 bits wide.
+    LDH [$FF00+$47], A    ; Store the cycled value back in BGP.
 
     ; Reload our frame counter to the initial value for the next iteration.
-    LD C, 60
+    LD C, WAIT_FRAMES
 
 vblankDone:
     ; Return from interrupt call and re-enable interrupts.
