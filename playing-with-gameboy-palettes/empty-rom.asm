@@ -1,4 +1,5 @@
 ; Boilerplate code for an empty ROM that won't crash.
+; Thanks to https://assemblydigest.tumblr.com/post/77198211186/tutorial-making-an-empty-game-boy-rom-in-rgbds
 
 ; The header.asm file contains the necessary hardcoded values to generate
 ; a mostly valid ROM header. I say "mostly" because it doesn't contain the
