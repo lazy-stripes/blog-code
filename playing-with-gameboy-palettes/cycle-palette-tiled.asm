@@ -1,4 +1,4 @@
-; Invert background palette every second.
+; Cycle background palette to give the illusion of vertical movement.
 
 INCLUDE "include/header.asm"
 
@@ -12,7 +12,7 @@ main:
     ; us to wait until VBlank. We could use the vblank interrupt too, but this
     ; is a short, one-time initialization so we'll do it the easy way.
 waitForFrame:
-    LDH A, [$FF00+$44] ; Wait for LY to reach value 144
+    LDH A, [$FF00+$44] ; Wait for LY to reach value 144 (0x90 in hexadecimal).
     CP $90
     JR NZ, waitForFrame
 
@@ -22,7 +22,7 @@ waitForFrame:
 
     ; Clear VRAM from 0x8000 to 0x9fff (borrowed from boot ROM code).
     LD HL, $9fff
-    clearVRAM:
+clearVRAM:
     LD [HL-], A         ; Set byte at address [HL] to zero, then decrement HL.
     BIT 7, H            ; Check whether H is still larger than 0x80.
     JR NZ, clearVRAM    ; If not, keep clearing VRAM.
@@ -65,7 +65,7 @@ lock:
 
 ; Entry point for the VBlank interrupt.
 vblank:
-    ; Invert background palette value in hardware register $ff47, but only
+    ; Cycle background palette value in hardware register $ff47, but only
     ; when our frame counter reaches zero.
 
     ; Decrement, then check frame counter value. Return if it's not zero.
