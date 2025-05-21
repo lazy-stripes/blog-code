@@ -1,4 +1,4 @@
-# Adjust paths to RGBDIS binaries here (or another assembler or your liking),
+# Adjust paths to RGBDIS binaries here (or another assembler of your liking),
 # or make sure they are in your PATH.
 ASM = rgbasm
 LINK = rgblink
@@ -9,10 +9,10 @@ all: 	empty-rom.gb \
 		invert-palette.gb \
 		invert-palette-tiled.gb \
 		cycle-palette-tiled.gb \
-		palette-cycle.gb
+		cycle-palette-tilemap.gb
 
 clean:
-	rm -f *.o *.tiles *.gb
+	rm -f *.o *.tiles *.tilemap *.gb
 
 # Generic rules for most of the input files.
 %.gb: %.o
@@ -26,4 +26,4 @@ clean:
 	$(GFX) -u -o $(basename $@).tiles -t $(basename $@).tilemap $<
 
 # Specific rules for targets that need tiles.
-palette-cycle.o: %.o: %.asm %.tiles %.tilemap
+cycle-palette-tilemap.o: %.o: %.asm %.tiles %.tilemap
