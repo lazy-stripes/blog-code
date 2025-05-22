@@ -1,0 +1,5 @@
+*.gb
+*.o
+*.tiles
+*.tilemap
+*.bin
