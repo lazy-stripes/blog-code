@@ -42,8 +42,9 @@ copyTileData:
     LD A, $1b
     LDH [$FF00+$47], A
 
-    ; Turn PPU back on (bit 7), read tile data from 0x8000 (bit 4).
-    LD A, $90
+        ; Write to LCDC to turn PPU back on.
+    ; Bit 7: enable PPU, bit 4: tile data at 0x8000, bit 0: show background.
+    LD A, $91
     LDH [$FF00+$40], A
 
     ; Initialize frame counter here. We'll wait 60 frames each time.
